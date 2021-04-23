@@ -5,4 +5,8 @@ class Controller
 {
 	
 	
+	public function response()
+	{
+
+	}
 }
