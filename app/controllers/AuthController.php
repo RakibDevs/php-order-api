@@ -17,10 +17,17 @@ class AuthController extends Controller
 
 	public function login()
 	{
-		$user = $this->user->first($_POST['email'], $_POST['password']);
+		$data = input()->all();
+		$user = $this->user->first($data['email'], $data['password']);
 		$user['access_token'] = $this->user->generateToken($user);
 
-		return json_encode($user);
+		response()->json($user);
+	}
+
+	public function logout()
+	{
+
+		return json_encode(['msg' => 'Logged out successfullt']);
 	}
 	
 }

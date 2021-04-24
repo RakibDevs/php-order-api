@@ -1,21 +1,18 @@
 <?php
 namespace App\Models;
 
+use App\Models\Model;
 use App\Contracts\AuthenticateUser;
-use Config\DB;
 
-class User
+
+
+class User extends Model
 {
 	protected $secret   = "*$%43MVKJTKMN$#";
 
-	protected $db;
-
 	use AuthenticateUser;
 
-	public function __construct()
-	{
-		$this->db = (new DB)->connect();
-	}
+	protected $table = 'users';
 	
 	public function first($email, $password)
 	{

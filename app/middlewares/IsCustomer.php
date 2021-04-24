@@ -5,7 +5,7 @@ use Pecee\Http\Middleware\IMiddleware;
 use Pecee\Http\Request;
 use App\Models\User;
 
-class IsAdmin implements IMiddleware 
+class IsCustomer implements IMiddleware 
 {
     protected $user;
 
@@ -17,7 +17,7 @@ class IsAdmin implements IMiddleware
     public function handle(Request $request): void 
     {
 
-        if(!($this->user->isAdmin())) {
+        if(!($this->user->isCustomer())) {
             response()->json([
                 'msg' => 'Unauthorised Access'
             ]);

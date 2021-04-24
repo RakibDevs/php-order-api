@@ -2,14 +2,25 @@
 namespace App\Controllers;
 
 use App\Controllers\Controller;
-
+use Pecee\Http\Request;
 use App\Models\Product;
+use App\Models\User;
 
 class ProductsController extends Controller
 {
+	protected $user; 
+
+	protected $product;
+
+	public function __construct()
+	{
+		$this->user    = new User;
+		$this->product = new Product;
+	}
+
 	public function index()
 	{
-		return json_encode(['hi' => 1]);
+
 	}
 
 	public function store()
@@ -19,7 +30,8 @@ class ProductsController extends Controller
 
 	public function show($id)
 	{
-		return json_encode(['hi' => $id]);
+		$product = $this->product->find($id);
+		response()->json($product);
 	}
 
 	public function update($id)

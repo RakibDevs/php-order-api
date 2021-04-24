@@ -27,22 +27,21 @@ trait AuthenticateUser
 
  	public function isAdmin()
  	{
+ 		$this->authenticate();
  		return $this->user['role'] == 'admin';
  	}
 
 
  	public function isCustomer()
  	{
+ 		$this->authenticate();
  		return $this->user['role'] == 'customer';
  	}
 
  	public function unAuthorised()
  	{
- 		header("Access-Control-Allow-Origin: *"); 
-		header("Content-type: application/json; charset=UTF-8");
 		http_response_code(200);
-		echo json_encode($this->user);
-		exit;
+		response()->json($this->user);
  	}
 
 
