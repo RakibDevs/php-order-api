@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ae71de7ce68c1f538afa4c69a895f2cc",
+    "content-hash": "5220b15e9fde580b0f1812970378ce25",
     "packages": [
         {
             "name": "firebase/php-jwt",
@@ -55,6 +55,61 @@
                 "php"
             ],
             "time": "2021-02-12T00:02:00+00:00"
+        },
+        {
+            "name": "pecee/simple-router",
+            "version": "4.3.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/skipperbent/simple-php-router.git",
+                "reference": "2a573f27fe4c6874f0e3902280e4fb0f28d409f7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/skipperbent/simple-php-router/zipball/2a573f27fe4c6874f0e3902280e4fb0f28d409f7",
+                "reference": "2a573f27fe4c6874f0e3902280e4fb0f28d409f7",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1",
+                "phpunit/phpunit": "^7"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Pecee\\": "src/Pecee/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Simon Sessingø",
+                    "email": "simon.sessingoe@gmail.com"
+                }
+            ],
+            "description": "Simple, fast PHP router that is easy to get integrated and in almost any project. Heavily inspired by the Laravel router.",
+            "keywords": [
+                "framework",
+                "input-handler",
+                "laravel",
+                "pecee",
+                "php",
+                "request-handler",
+                "route",
+                "router",
+                "routing",
+                "routing-engine",
+                "simple-php-router",
+                "url-handling"
+            ],
+            "time": "2021-04-01T01:16:29+00:00"
         },
         {
             "name": "steampixel/simple-php-router",

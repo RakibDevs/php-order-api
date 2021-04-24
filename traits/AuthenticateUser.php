@@ -6,33 +6,78 @@ use Models\User;
 
 trait AuthenticateUser
 {
-	public function authenticate($bearer)
+
+	protected $user;
+
+	public function isAuth()
+ 	{
+ 		$user = $this->authenticate();
+ 		return $user['status'] == 1;
+ 	}
+
+ 	public function isAdmin()
+ 	{
+ 		return $this->user['role'] == 'admin';
+ 	}
+
+
+ 	public function isCustomer()
+ 	{
+ 		return $this->user['role'] == 'customer';
+ 	}
+
+ 	public function unauthorised()
+ 	{
+ 		header("Access-Control-Allow-Origin: *"); 
+		header("Content-type: application/json; charset=UTF-8");
+		http_response_code(200);
+		echo json_encode($this->user);
+		exit;
+ 	}
+
+
+	public function authenticate()
  	{ 
+ 		$this->user = (object)[
+ 			'status' => 0,
+ 			'message' => 'Invalid Token'
+ 		];
+
  		try {
+ 			$bearer = $this->getBearerToken();
+ 			if($bearer){
+	 			$decoded = JWT::decode($bearer, $this->secret, array('HS256'));
+	 			$payload = json_decode(json_encode($decoded),true);
+	 			$this->user = $payload;
 
- 			$decoded = JWT::decode($bearer, $this->secret, array('HS256'));
- 			$payload = json_decode(json_encode($decoded),true);
-
- 			$user    = (new User)->find($payload['user_id']);
- 
- 			if($payload['user_id'] == $user_id) {
- 				$res=array("status"=>true);
+	 			return [
+	 				'status' => 1,
+	 				'user_id' => $payload['user_id'],
+	 				'role' => $payload['role']
+	 			];
  			}else{
- 				$res=array(
- 					"status"=>false,
- 					"Error"=>"Invalid Token or Token Exipred, So Please login Again!");
+	 			return [
+	 				"status" => 0, 
+	 				"message"    => 'Invalid Token'
+	 			];
  			}
- 		}catch (UnexpectedValueException $e) {
- 			$res=array("status"=>false,"Error"=>$e->getMessage());
+
+ 		}catch (\Exception $e) {
+ 			$this->user = [
+ 				"status" => 0, 
+ 				"message"	 => $e->getMessage()
+ 			];
+ 			return  $this->user;
  		} 
- 		return $res;
  
  	}
 
- 	public function generateToken($uid)
+ 	public function generateToken($user)
 	{
 		try{
-			return JWT::encode($this->getPayload($uid), $this->secret,'HS256'); 
+
+			$payload = $this->getPayload($user);
+			return JWT::encode($payload, $this->secret,'HS256'); 
 
 		}catch (UnexpectedValueException $e) {
 			$res=array("status"=>false,"Error"=>$e->getMessage());
@@ -40,16 +85,29 @@ trait AuthenticateUser
 		return $res;
 	}
 
-	public function getPayload($uid)
+	public function getPayload($user)
 	{
 		return [
 			'iss' 	  => $_SERVER['HTTP_HOST'],
 			'exp'     => time()+600, 
-			'user_id' => $uid
+			'user_id' => $user['id'],
+			'role'    => $user['role']
 		];
 	}
 
- 	function getAuthorizationHeader()
+	public function getBearerToken()
+ 	{
+ 		$headers = $this->getAuthorizationHeader();
+	    // HEADER: Get the access token from the header
+	    if (!empty($headers)) {
+	        if (preg_match('/Bearer\s(\S+)/', $headers, $matches)) {
+	            return $matches[1];
+	        }
+	    }
+	    return null;
+ 	}
+
+ 	public function getAuthorizationHeader()
  	{
         $headers = null;
         if (isset($_SERVER['Authorization'])) {
@@ -69,15 +127,5 @@ trait AuthenticateUser
         return $headers;
     }
 
- 	public function getBearerToken()
- 	{
- 		$headers = getAuthorizationHeader();
-	    // HEADER: Get the access token from the header
-	    if (!empty($headers)) {
-	        if (preg_match('/Bearer\s(\S+)/', $headers, $matches)) {
-	            return $matches[1];
-	        }
-	    }
-	    return null;
- 	}
+ 	
 }

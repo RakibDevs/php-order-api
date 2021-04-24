@@ -1,11 +1,13 @@
 {
     "require": {
         "firebase/php-jwt": "^5.1",
-        "steampixel/simple-php-router": "^0.7.0"
+        "steampixel/simple-php-router": "^0.7.0",
+        "pecee/simple-router": "4.3.2.1"
     },
     "autoload": {
         "psr-4": {
             "Controllers\\": "controllers",
+            "MiddleWares\\": "middlewares",
             "Models\\": "models",
             "Config\\": "config",
             "Traits\\": "traits"

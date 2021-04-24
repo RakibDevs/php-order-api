@@ -15,7 +15,7 @@ class AuthController extends Controller
 	public function login()
 	{
 		$user = (new User)->first($_POST['email'], $_POST['password']);
-		$user['access_token'] = $this->generateToken($user['id']);
+		$user['access_token'] = $this->generateToken($user);
 
 		return json_encode($user);
 	}
