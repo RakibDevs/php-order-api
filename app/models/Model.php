@@ -25,4 +25,16 @@ class Model
 		return $stmt->fetch(\PDO::FETCH_ASSOC);	
 
 	}
+
+	protected function limit($page, $perpage)
+	{
+		return "LIMIT ".$perpage;
+	}
+
+	protected function offset($page, $perpage)
+	{
+		return "OFFSET ".$page*$perpage;
+	}
+
+
 }

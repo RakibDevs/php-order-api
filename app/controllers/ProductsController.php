@@ -20,7 +20,8 @@ class ProductsController extends Controller
 
 	public function index()
 	{
-
+		$input = input()->all();
+		$this->product->getProducts($input);
 	}
 
 	public function store()
