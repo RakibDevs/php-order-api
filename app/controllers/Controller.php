@@ -1,9 +1,8 @@
 <?php
-namespace Controllers;
+namespace App\Controllers;
 
 class Controller 
 {
-	
 	
 	public function response()
 	{

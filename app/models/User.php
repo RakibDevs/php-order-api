@@ -1,20 +1,20 @@
 <?php
-namespace Models;
+namespace App\Models;
 
+use App\Contracts\AuthenticateUser;
 use Config\DB;
 
 class User
 {
+	protected $secret   = "*$%43MVKJTKMN$#";
+
 	protected $db;
+
+	use AuthenticateUser;
 
 	public function __construct()
 	{
 		$this->db = (new DB)->connect();
-	}
-
-	public function hash($password)
-	{
-		return md5($password);
 	}
 	
 	public function first($email, $password)
@@ -40,17 +40,5 @@ class User
 		return $stmt->fetch(\PDO::FETCH_ASSOC);	
 
 	}
-
-	public function isAdmin($user)
- 	{
- 		return $user['role'] == 'admin';
- 	}
-
-
- 	public function isCustomer($user)
- 	{
- 		return $user['role'] == 'customer';
- 	}
-
 	
 }

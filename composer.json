@@ -6,11 +6,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Controllers\\": "controllers",
-            "MiddleWares\\": "middlewares",
-            "Models\\": "models",
-            "Config\\": "config",
-            "Traits\\": "traits"
+            "App\\":"app",
+            "Config\\": "config"
         }
     }
 }

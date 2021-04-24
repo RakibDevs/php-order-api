@@ -1,18 +1,28 @@
 <?php
-namespace Traits;
+namespace App\Contracts;
 
 use Firebase\JWT\JWT;
-use Models\User;
 
 trait AuthenticateUser
 {
 
 	protected $user;
 
-	public function isAuth()
+	public function hash($password)
+	{
+		return md5($password);
+	}
+
+	public function isLoggedIn()
  	{
- 		$user = $this->authenticate();
- 		return $user['status'] == 1;
+ 		$this->authenticate();
+ 		return $this->user['status'] == 1;
+ 	}
+
+ 	public function isNotLoggedIn()
+ 	{
+ 		$this->authenticate();
+ 		return $this->user['status'] == 0;
  	}
 
  	public function isAdmin()
@@ -26,7 +36,7 @@ trait AuthenticateUser
  		return $this->user['role'] == 'customer';
  	}
 
- 	public function unauthorised()
+ 	public function unAuthorised()
  	{
  		header("Access-Control-Allow-Origin: *"); 
 		header("Content-type: application/json; charset=UTF-8");
@@ -38,33 +48,27 @@ trait AuthenticateUser
 
 	public function authenticate()
  	{ 
- 		$this->user = (object)[
- 			'status' => 0,
- 			'message' => 'Invalid Token'
- 		];
-
  		try {
  			$bearer = $this->getBearerToken();
  			if($bearer){
 	 			$decoded = JWT::decode($bearer, $this->secret, array('HS256'));
-	 			$payload = json_decode(json_encode($decoded),true);
-	 			$this->user = $payload;
-
-	 			return [
-	 				'status' => 1,
+	 			$payload = $this->formatPayload($decoded);
+	 			$this->user = [
+	 				'status'  => 1,
 	 				'user_id' => $payload['user_id'],
-	 				'role' => $payload['role']
+	 				'role'    => $payload['role']
 	 			];
  			}else{
-	 			return [
-	 				"status" => 0, 
+	 			$this->user = [
+	 				"status"     => 0, 
 	 				"message"    => 'Invalid Token'
 	 			];
  			}
+ 			return  $this->user;
 
  		}catch (\Exception $e) {
  			$this->user = [
- 				"status" => 0, 
+ 				"status"     => 0, 
  				"message"	 => $e->getMessage()
  			];
  			return  $this->user;
@@ -93,6 +97,12 @@ trait AuthenticateUser
 			'user_id' => $user['id'],
 			'role'    => $user['role']
 		];
+	}
+
+
+	public function formatPayload($payload)
+	{
+		return json_decode(json_encode($payload),true);
 	}
 
 	public function getBearerToken()
