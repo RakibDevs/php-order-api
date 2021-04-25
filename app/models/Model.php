@@ -26,6 +26,30 @@ class Model
 
 	}
 
+	public function get()
+	{
+		$query = "SELECT * from ".$this->table." order by id desc";
+
+		$stmt = $this->db->prepare($query);
+		$stmt->execute();
+
+		return $stmt->fetchAll(\PDO::FETCH_ASSOC);	
+	}
+
+	public function storeFile($f)
+	{
+		$type = explode(".",$f['name']);
+	    $extension = end($type);
+	    $url = "./assets/images/".uniqid(rand()).".".$extension;
+
+        if(is_uploaded_file($f['tmp_name'])){
+            if(move_uploaded_file($f['tmp_name'],$url)){
+                return $url;
+            }
+        }
+	}
+
+
 	protected function limit($page, $perpage)
 	{
 		return "LIMIT ".$perpage;
@@ -34,6 +58,11 @@ class Model
 	protected function offset($page, $perpage)
 	{
 		return "OFFSET ".$page*$perpage;
+	}
+
+	public function exception()
+	{
+		toApi(200,'error','Something wrong happened! Please try again');
 	}
 
 

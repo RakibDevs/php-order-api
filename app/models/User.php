@@ -27,6 +27,27 @@ class User extends Model
 
 	}
 
+	public function insert($data)
+	{
+		try {
+			$name     = $data['name'];
+			$email 	  = $data['email'];
+			$password = $this->hash($data['password']);
+
+			$query = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
+			$stmt = $this->db->prepare($query);
+			$stmt->execute([$name, $email,$password]);
+			$stmt = null;
+			toApi(200,'success', 'Registered succesfully');
+		}catch(\Exception $e){
+			if($e->errorInfo[1] == 1062){
+				toApi(200,'error', 'This email has been used already');
+			}
+			$this->exception();
+		}
+		
+	}
+
 	public function find($id)
 	{
 

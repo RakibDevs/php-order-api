@@ -86,3 +86,20 @@ function csrf_token(): ?string
 
     return null;
 }
+
+/**
+ * return api response 
+ *
+ */
+function toApi(int $code, string $status, string $message = nul, $data = null)
+{
+    $response = [
+        'status'  => $status,
+        'message' => $message
+    ];
+    if($data !== null){
+        $response['data'] = $data;
+    }
+    http_response_code($code);
+    response()->json($response);
+}

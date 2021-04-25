@@ -38,11 +38,7 @@ SimpleRouter::group(['prefix' => 'test'], function(){
 SimpleRouter::error(function(Request $request, \Exception $exception) {
 
     if($exception instanceof NotFoundHttpException) {
-    	http_response_code(404);
-        response()->json([
-        	'status' => 0,
-        	'message' => '404! url not found!'
-        ]);
+        toApi(404,'error','404! Not found!');
     }
     
 });

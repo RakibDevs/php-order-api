@@ -20,19 +20,20 @@ class ProductsController extends Controller
 
 	public function index()
 	{
-		$input = input()->all();
-		$this->product->getProducts($input);
+		$products = $this->product->get();
+		toApi(200,'success', 'Products', $products);
 	}
 
 	public function store()
 	{
-		return json_encode(['hi' => 1]);
+		$products = $this->product->storeProduct(input()->all());
+		toApi(200,'success', 'Product saved successfully');
 	}
 
 	public function show($id)
 	{
 		$product = $this->product->find($id);
-		response()->json($product);
+		toApi(200,'success', 'Product', $product);
 	}
 
 	public function update($id)
