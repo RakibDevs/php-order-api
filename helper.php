@@ -100,6 +100,7 @@ function toApi(int $code, string $status, string $message = nul, $data = null)
     if($data !== null){
         $response['data'] = $data;
     }
+    header("Access-Control-Allow-Origin: *");      
     http_response_code($code);
     response()->json($response);
 }
