@@ -91,7 +91,7 @@ function csrf_token(): ?string
  * return api response 
  *
  */
-function toApi(int $code, string $status, string $message = nul, $data = null)
+function toApi(int $code, string $status, string $message = null, $data = null)
 {
     $response = [
         'status'  => $status,
