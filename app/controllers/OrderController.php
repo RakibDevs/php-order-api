@@ -47,6 +47,13 @@ class OrderController extends Controller
 		toApi(200,'success','Your Orders', $order);
 	}
 
+	public function update($id)
+	{
+		$status = input('status');
+		$this->order->setStatus($id, $status);
+		toApi(200,'error','No order found!');
+	}
+
 	public function orders()
 	{
 		$orders = $this->order->get();

@@ -26,6 +26,19 @@ class Order extends Model
 		return $stmt->fetchAll(\PDO::FETCH_ASSOC);
 	}
 
+	public function setStatus($id, $status)
+	{
+		try {
+			$query = "UPDATE ".$this->table." SET status = ? WHERE id = ?";
+			$stmt = $this->db->prepare($query);
+			$stmt->execute([$status, $id]);
+
+			toApi(200,'success','Order status has been updated!');
+		}catch(\Exception $e){
+			$this->exception();
+		}
+	}
+
 	public function products($order)
 	{
 		$query = "SELECT op.*,p.title,p.image FROM ".$this->order_products." AS op LEFT JOIN products as p ON op.product_id = p.id WHERE op.order_id = ? ";
