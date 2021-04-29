@@ -38,6 +38,12 @@ trait AuthenticateUser
  		return $this->user['role'] == 'customer';
  	}
 
+ 	public function getUserId()
+ 	{
+ 		$this->authenticate();
+ 		return $this->user['user_id'];
+ 	}
+
  	public function unAuthorised()
  	{
 		http_response_code(200);
