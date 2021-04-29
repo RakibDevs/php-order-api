@@ -9,6 +9,14 @@ class Product extends Model
 
 	protected $categories_table = 'categories';
 
+	public function catrgories()
+	{
+		$query = "SELECT * FROM ".$this->categories_table." order by id desc";
+		$stmt = $this->db->prepare($query);
+		$stmt->execute();
+
+		return $stmt->fetchAll(\PDO::FETCH_ASSOC);	
+	}
 
 	public function getProducts($input)
 	{

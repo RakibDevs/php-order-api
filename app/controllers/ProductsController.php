@@ -45,4 +45,10 @@ class ProductsController extends Controller
 	{
 		return json_encode(['hi' => 1]);
 	}
+
+	public function categories()
+	{
+		$catrgories = $this->product->catrgories();
+		toApi(200,'success', 'Categories', $catrgories);
+	}
 }

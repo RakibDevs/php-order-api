@@ -11,7 +11,7 @@ class Order extends Model
 
 	public function getLastOrder()
 	{
-		$query = "SELECT * from ".$this->table." ORDER BY id DESC  LIMIT 1";
+		$query = "SELECT * FROM ".$this->table." ORDER BY id DESC  LIMIT 1";
 
 		$stmt = $this->db->prepare($query);
 		$stmt->execute();
@@ -20,9 +20,17 @@ class Order extends Model
 
 	public function getMyOrders($customer)
 	{
-		$query = "SELECT * from ".$this->table." WHERE customer_id = ? ORDER BY id DESC  LIMIT 10";
+		$query = "SELECT * FROM ".$this->table." WHERE customer_id = ? ORDER BY id DESC  LIMIT 10";
 		$stmt = $this->db->prepare($query);
 		$stmt->execute([$customer]);
+		return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+	}
+
+	public function products($order)
+	{
+		$query = "SELECT op.*,p.title,p.image FROM ".$this->order_products." AS op LEFT JOIN products as p ON op.product_id = p.id WHERE op.order_id = ? ";
+		$stmt = $this->db->prepare($query);
+		$stmt->execute([$order]);
 		return $stmt->fetchAll(\PDO::FETCH_ASSOC);
 	}
 

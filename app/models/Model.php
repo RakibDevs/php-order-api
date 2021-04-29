@@ -17,7 +17,7 @@ class Model
 
 	public function find($id)
 	{
-		$query = "SELECT * from ".$this->table." where id= ? LIMIT 1";
+		$query = "SELECT * FROM ".$this->table." where id= ? LIMIT 1";
 
 		$stmt = $this->db->prepare($query);
 		$stmt->execute([$id]);
@@ -28,11 +28,21 @@ class Model
 
 	public function get()
 	{
-		$query = "SELECT * from ".$this->table." order by id desc";
+		$query = "SELECT * FROM ".$this->table." order by id desc";
 		$stmt = $this->db->prepare($query);
 		$stmt->execute();
 
 		return $stmt->fetchAll(\PDO::FETCH_ASSOC);	
+	}
+
+	public function count()
+	{
+		$query = "SELECT COUNT(*) AS total_records FROM ".$this->table;
+		$stmt = $this->db->prepare($query);
+		$stmt->execute();
+		$records =  $stmt->fetch(\PDO::FETCH_ASSOC);
+		
+		return $records['total_records'];	
 	}
 
 	public function storeFile($f)

@@ -11,6 +11,7 @@ SimpleRouter::group(['prefix' => 'test'], function(){
 	SimpleRouter::post('/register', [AuthController::class, 'register']);
 	SimpleRouter::post('/login', [AuthController::class, 'login']);
 	SimpleRouter::get('/products', [ProductsController::class, 'index']);
+	SimpleRouter::get('/categories', [ProductsController::class, 'categories']);
 	SimpleRouter::get('/products/{id}', [ProductsController::class, 'show']);
 
 	SimpleRouter::group(['middleware' => Auth::class], function() {
@@ -30,6 +31,7 @@ SimpleRouter::group(['prefix' => 'test'], function(){
 			
 		});
 
+		SimpleRouter::get('/orders/{id}', [OrderController::class, 'show']);
 		SimpleRouter::get('/orders/{id}/delete', [OrderController::class, 'delete']);
 
 		SimpleRouter::get('/logout', [AuthController::class, 'logout']);

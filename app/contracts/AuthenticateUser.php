@@ -97,7 +97,7 @@ trait AuthenticateUser
 	{
 		return [
 			'iss' 	  => $_SERVER['HTTP_HOST'],
-			'exp'     => time()+600, 
+			'exp'     => time()+10000, 
 			'user_id' => $user['id'],
 			'role'    => $user['role']
 		];

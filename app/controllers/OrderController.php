@@ -28,12 +28,29 @@ class OrderController extends Controller
 	}
 
 
+	public function show($id)
+	{
+		$data['order'] 	  = $this->order->find($id);
+		if($data['order']){
+			$data['products'] = $this->order->products($id);
+			toApi(200,'success','Order Products', $data);
+		}
+		toApi(200,'error','No order found!');
+	}
+
+
 	public function myOrders()
 	{
 		$customer  = $this->user->getUserId();
 		$order     = $this->order->getMyOrders($customer);
 
 		toApi(200,'success','Your Orders', $order);
+	}
+
+	public function orders()
+	{
+		$orders = $this->order->get();
+		toApi(200,'success','ALl Orders', $orders);
 	}
 
 
