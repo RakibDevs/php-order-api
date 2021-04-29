@@ -11,11 +11,19 @@ class Order extends Model
 
 	public function getLastOrder()
 	{
-		$query = "SELECT * from ".$this->table." ORDER BY ID DESC  LIMIT 1";
+		$query = "SELECT * from ".$this->table." ORDER BY id DESC  LIMIT 1";
 
 		$stmt = $this->db->prepare($query);
 		$stmt->execute();
 		return $stmt->fetch(\PDO::FETCH_ASSOC);
+	}
+
+	public function getMyOrders($customer)
+	{
+		$query = "SELECT * from ".$this->table." WHERE customer_id = ? ORDER BY id DESC  LIMIT 10";
+		$stmt = $this->db->prepare($query);
+		$stmt->execute([$customer]);
+		return $stmt->fetchAll(\PDO::FETCH_ASSOC);
 	}
 
 	public function insertOrder($customer, $orderCode, $data)
@@ -28,13 +36,15 @@ class Order extends Model
 			$stmt = $this->db->prepare($query);
 			$stmt->execute([$customer, $orderCode,$amount]);
 
+			// get last product id
 			$orderId = $this->db->lastInsertId();
 			// store order products
 			$this->insertOrderProducts($orderId, $data['products']);
+			// commit database changes
+
 			$this->db->commit();
-			toApi(200,'sucess','Order placed! Your order ID is '.$orderCode);
+			toApi(200,'success','Order placed! Your order ID is '.$orderCode);
 		}catch(\Exception $e){
-			var_dump($e->getMessage());
 			$this->db->rollBack();
 			$this->exception();
 		}
@@ -42,6 +52,7 @@ class Order extends Model
 
 	public function insertOrderProducts($orderId, $products)
 	{
+		// insert multiple products
 		$stmt = $this->db->prepare('INSERT INTO '.$this->order_products.' (order_id,product_id,unit_price,qty) VALUES(:order_id, :product_id, :unit_price, :qty)');
 		foreach($products as $item)
 		{

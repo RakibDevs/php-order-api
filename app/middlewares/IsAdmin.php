@@ -18,9 +18,7 @@ class IsAdmin implements IMiddleware
     {
 
         if(!($this->user->isAdmin())) {
-            response()->json([
-                'msg' => 'Unauthorised Access'
-            ]);
+            toApi(401,'error','Unauthorised Access');
         }
 
     }

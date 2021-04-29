@@ -18,9 +18,7 @@ class IsCustomer implements IMiddleware
     {
 
         if(!($this->user->isCustomer())) {
-            response()->json([
-                'msg' => 'Unauthorised Access'
-            ]);
+            toApi(401,'error','Unauthorised Access');
         }
 
     }

@@ -46,8 +46,7 @@ trait AuthenticateUser
 
  	public function unAuthorised()
  	{
-		http_response_code(200);
-		response()->json($this->user);
+		toApi(401,'error',$this->user['message']);
  	}
 
 
@@ -66,7 +65,7 @@ trait AuthenticateUser
  			}else{
 	 			$this->user = [
 	 				"status"     => 0, 
-	 				"message"    => 'Invalid Token'
+	 				"message"    => 'Unauthorised Accesss'
 	 			];
  			}
  			return  $this->user;

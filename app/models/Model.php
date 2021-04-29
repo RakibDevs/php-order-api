@@ -29,7 +29,6 @@ class Model
 	public function get()
 	{
 		$query = "SELECT * from ".$this->table." order by id desc";
-
 		$stmt = $this->db->prepare($query);
 		$stmt->execute();
 

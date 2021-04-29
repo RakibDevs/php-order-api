@@ -27,6 +27,16 @@ class OrderController extends Controller
 		$this->order->insertOrder($customer, $orderCode, input()->all());
 	}
 
+
+	public function myOrders()
+	{
+		$customer  = $this->user->getUserId();
+		$order     = $this->order->getMyOrders($customer);
+
+		toApi(200,'success','Your Orders', $order);
+	}
+
+
 	protected function genrateOrderCode()
 	{
 		$last = $this->order->getLastOrder();
