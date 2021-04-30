@@ -9,6 +9,8 @@ class Product extends Model
 
 	protected $categories_table = 'categories';
 
+	protected $skuSuffix = 'WE';
+
 	public function catrgories()
 	{
 		$query = "SELECT * FROM ".$this->categories_table." order by id desc";
@@ -39,8 +41,8 @@ class Product extends Model
 		}	
 
 		$title     = $input['title'];
-		$category  = $this->generateSku();
-		$sku       = 'CAT00TEST';
+		$category  = $input['category_id'];
+		$sku       = $this->generateSku($category);
 		$description= $input['description'];
 		$price 	   = $input['price'];
 
@@ -53,9 +55,44 @@ class Product extends Model
 
 	}
 
-	public function generateSku()
+	public function updateProduct($id, $input)
 	{
-		return 'CAT00001';
+		/*$image = $input['prev_image_src'];
+		if($input['image']){
+			$image = $this->storeFile($input['image']);
+		}*/	
+
+		$title     = $input['title'];
+		$category  = $input['category_id'];
+		$description= $input['description'];
+		$price 	   = $input['price'];
+
+		$query = "UPDATE products SET title = ? , category_id = ? , description = ?, price = ? WHERE id = ?";
+		$stmt = $this->db->prepare($query);
+		$stmt->execute([$title, $category, $description, $price, $id]);
+		$stmt = null;
+
+		toApi(200,'success','Product updated succesfuly');
+		
+	}
+
+
+	public function generateSku($category)
+	{
+		$last = $this->getLastProduct($category);
+		$id   = $last['id']??1;
+
+		$suffix = sprintf('%02d', $category).$this->skuSuffix;
+
+		return $suffix .sprintf('%03d', $id+1);
+	}
+
+	public function getLastProduct($category)
+	{
+		$query = "SELECT * FROM ".$this->table." WHERE category_id = ? ORDER BY id DESC  LIMIT 1";
+		$stmt = $this->db->prepare($query);
+		$stmt->execute([$category]);
+		return $stmt->fetch(\PDO::FETCH_ASSOC);
 	}
 
 

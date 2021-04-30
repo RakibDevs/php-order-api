@@ -20,7 +20,6 @@ class ProductsController extends Controller
 
 	public function index()
 	{
-		var_dump(class_exists('App\\Controllers\\ProductsController'));
 		$products = $this->product->getProducts();
 		toApi(200,'success', 'Products', $products);
 	}
@@ -39,12 +38,14 @@ class ProductsController extends Controller
 
 	public function update($id)
 	{
-		return json_encode(['hi' => 1]);
+		$products = $this->product->updateProduct($id, input()->all());
+		toApi(200,'success', 'Product saved successfully');
 	}
 
 	public function delete($id)
 	{
-		return json_encode(['hi' => 1]);
+		$this->product->delete($id);
+		toApi(200,'success','Product Deleted Succesfuly');
 	}
 
 	public function categories()

@@ -21,7 +21,7 @@ SimpleRouter::group(['prefix' => 'test'], function(){
 		SimpleRouter::group(['middleware' => IsAdmin::class], function() {
 			SimpleRouter::post('/products/store', [ProductsController::class, 'store']);
 			SimpleRouter::post('/products/{id}/update', [ProductsController::class, 'update']);
-			SimpleRouter::get('/products/{id}/delete', [ProductsController::class, 'delete']);
+			SimpleRouter::delete('/products/{id}', [ProductsController::class, 'delete']);
 
 			SimpleRouter::get('/orders/', [OrderController::class, 'orders']);
 			SimpleRouter::post('/orders/{id}/update', [OrderController::class, 'update']);
@@ -35,7 +35,7 @@ SimpleRouter::group(['prefix' => 'test'], function(){
 		});
 
 		SimpleRouter::get('/orders/{id}', [OrderController::class, 'show']);
-		SimpleRouter::get('/orders/{id}/delete', [OrderController::class, 'delete']);
+		//SimpleRouter::delete('/orders/{id}', [OrderController::class, 'delete']);
 
 		SimpleRouter::get('/logout', [AuthController::class, 'logout']);
 	});

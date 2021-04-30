@@ -35,6 +35,14 @@ class Model
 		return $stmt->fetchAll(\PDO::FETCH_ASSOC);	
 	}
 
+	public function delete($id)
+	{
+		$query = "DELETE FROM ".$this->table." WHERE id = ?";
+		$stmt = $this->db->prepare($query);
+		$stmt->execute([$id]);
+		return $stmt->execute([$id]);	
+	}
+
 	public function count()
 	{
 		$query = "SELECT COUNT(*) AS total_records FROM ".$this->table;
