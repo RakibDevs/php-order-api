@@ -18,16 +18,16 @@ class Product extends Model
 		return $stmt->fetchAll(\PDO::FETCH_ASSOC);	
 	}
 
-	public function getProducts($input)
+	public function getProducts()
 	{
 		$where = '';
 		$limit = '';
 
-		$query = "SELECT p.* from ".$this->table." where email= ? and password= ? LIMIT 1";
+		$query = "SELECT p.*, c.name as category_name from ".$this->table." AS p LEFT JOIN ".$this->categories_table." AS c ON p.category_id = c.id ORDER BY p.id";
 		$stmt = $this->db->prepare($query);
-		$stmt->execute([$email,$password]);
+		$stmt->execute();
 
-		return $stmt->fetch(\PDO::FETCH_ASSOC);
+		return $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
 	}
 

@@ -25,8 +25,8 @@ DROP TABLE IF EXISTS `categories`;
 CREATE TABLE `categories` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -54,10 +54,10 @@ CREATE TABLE `order_products` (
   `product_id` int(11) NOT NULL,
   `unit_price` float DEFAULT 0,
   `qty` int(11) DEFAULT 0,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -66,6 +66,7 @@ CREATE TABLE `order_products` (
 
 LOCK TABLES `order_products` WRITE;
 /*!40000 ALTER TABLE `order_products` DISABLE KEYS */;
+INSERT INTO `order_products` VALUES (40,27,5,49,1,'2021-04-29 15:57:06','2021-04-29 15:57:06'),(41,27,4,55,1,'2021-04-29 15:57:06','2021-04-29 15:57:06'),(42,27,6,149,1,'2021-04-29 15:57:06','2021-04-29 15:57:06'),(43,28,6,149,1,'2021-04-29 20:53:25','2021-04-29 20:53:25'),(44,28,5,49,1,'2021-04-29 20:53:25','2021-04-29 20:53:25'),(45,28,4,55,1,'2021-04-29 20:53:25','2021-04-29 20:53:25'),(46,28,2,156,1,'2021-04-29 20:53:25','2021-04-29 20:53:25'),(47,28,3,99,1,'2021-04-29 20:53:25','2021-04-29 20:53:25'),(48,29,5,49,1,'2021-04-29 21:33:41','2021-04-29 21:33:41'),(49,29,2,156,1,'2021-04-29 21:33:41','2021-04-29 21:33:41'),(50,29,6,149,1,'2021-04-29 21:33:41','2021-04-29 21:33:41'),(51,30,3,99,1,'2021-04-30 07:20:48','2021-04-30 07:20:48');
 /*!40000 ALTER TABLE `order_products` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -79,15 +80,17 @@ DROP TABLE IF EXISTS `orders`;
 CREATE TABLE `orders` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `customer_id` int(11) DEFAULT NULL,
+  `order_code` varchar(12) DEFAULT NULL,
+  `payment_type` int(4) DEFAULT 1 COMMENT '1= Cash on Delvry',
   `amount` float DEFAULT 0,
   `discount` float DEFAULT 0,
   `tax` float DEFAULT 0,
-  `status` varchar(15) DEFAULT NULL,
+  `status` varchar(15) DEFAULT 'Processing',
   `processed_by` bigint(20) unsigned DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -96,6 +99,7 @@ CREATE TABLE `orders` (
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
+INSERT INTO `orders` VALUES (27,6,'WE00000026',1,253,0,0,'Delivered',NULL,'2021-04-29 15:57:06','2021-04-29 22:17:35'),(28,6,'WE00000027',1,508,0,0,'Processing',NULL,'2021-04-29 20:53:25','2021-04-29 22:22:50'),(29,6,'WE00000028',1,354,0,0,'Delivered',NULL,'2021-04-29 21:33:41','2021-04-30 07:19:08'),(30,6,'WE00000029',1,99,0,0,'Shipped',NULL,'2021-04-30 07:20:48','2021-04-30 07:21:11');
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -115,12 +119,12 @@ CREATE TABLE `products` (
   `price` float NOT NULL DEFAULT 0,
   `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_by` bigint(20) unsigned DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`),
   KEY `products_created_by_foreign` (`created_by`),
   CONSTRAINT `products_created_by_foreign` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -148,8 +152,8 @@ CREATE TABLE `users` (
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `role` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT 'customer',
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_email_unique` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -161,7 +165,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (4,'Admin','admin@shop.com',NULL,'e10adc3949ba59abbe56e057f20f883e',NULL,'admin',NULL,NULL),(5,'Customer 1','customer1@shop.com',NULL,'e10adc3949ba59abbe56e057f20f883e',NULL,'customer',NULL,NULL),(6,'TestCustomer','customer@shop.com',NULL,'e10adc3949ba59abbe56e057f20f883e',NULL,'customer',NULL,NULL);
+INSERT INTO `users` VALUES (4,'Admin','admin@shop.com',NULL,'e10adc3949ba59abbe56e057f20f883e',NULL,'admin',NULL,NULL),(6,'Customer','customer@shop.com',NULL,'e10adc3949ba59abbe56e057f20f883e',NULL,'customer',NULL,'2021-04-30 07:22:59');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -178,4 +182,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-04-28 21:23:21
+-- Dump completed on 2021-04-30 13:23:16

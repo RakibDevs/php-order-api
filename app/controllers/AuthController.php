@@ -32,11 +32,12 @@ class AuthController extends Controller
 	{
 		$data = input()->all();
 		$this->passwordMatch($data);
-		$user = $this->user->insert($data);
-		if($user){
+		$id = $this->user->insert($data);
+		if($id){
+			$user = $this->user->find($id);
 			$user['access_token'] = $this->user->generateToken($user);
 			
-			toApi(200,'success','Logged in succesfuly', $user);
+			toApi(200,'success','Register & Loggedd in succesfuly', $user);
 		}else{
 			toApi(200,'error','Invalid email or password');
 		}

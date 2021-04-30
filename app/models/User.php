@@ -37,8 +37,9 @@ class User extends Model
 			$query = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
 			$stmt = $this->db->prepare($query);
 			$stmt->execute([$name, $email,$password]);
-			$stmt = null;
-			toApi(200,'success', 'Registered succesfully');
+			
+			return $this->db->lastInsertId();
+			
 		}catch(\Exception $e){
 			if($e->errorInfo[1] == 1062){
 				toApi(200,'error', 'This email has been used already');

@@ -20,7 +20,8 @@ class ProductsController extends Controller
 
 	public function index()
 	{
-		$products = $this->product->get();
+		var_dump(class_exists('App\\Controllers\\ProductsController'));
+		$products = $this->product->getProducts();
 		toApi(200,'success', 'Products', $products);
 	}
 
